@@ -1,39 +1,39 @@
 use 2026_kursova_rabota;
 
-/*SELECT с ограничаващо условие*/
- Select id, take_off_date, duration_minutes 
+/* SELECT with filtering condition */
+Select id, take_off_date, duration_minutes 
 from flights 
 where duration_minutes > 120;
 
-/*Агрегатна функция и GROUP BY*/
+/* Aggregate function and GROUP BY */
 Select crew_role, count(*) as total_members
 from crew_members
 group by crew_role;
 
-/*INNER JOIN*/
+/* INNER JOIN */
 Select flights.id, planes.plane_type, planes.company
 from flights
 inner join planes on flights.plane_id = planes.id;
 
-/*OUTER JOIN*/
+/* LEFT OUTER JOIN */
 Select crew_members.crew_name, flight_crew.flight_id
 from crew_members
 left outer join flight_crew on crew_members.id = flight_crew.crew_member_id;
 
-/*Вложен SELECT*/
+/* Subquery (Nested SELECT) */
 Select * 
 from flights 
 where departure_airport_id = (select id from airports where city = 'Sofia');
 
-/*JOIN + Агрегатна функция*/
+/* JOIN with aggregate function */
 Select planes.company, sum(flights.duration_minutes) as total_minutes
 from flights
 inner join planes on flights.plane_id = planes.id
 group by planes.company;
 
-/*TRIGGER*/
+/* TRIGGER */
 Delimiter //
-Create trigger  prevent_crew_overlays
+Create trigger prevent_crew_overlays
 before insert on flight_crew
 for each row
 begin
@@ -46,7 +46,7 @@ begin
 
     Select count(*) into conflict_count
     from flight_crew fc
-    join flights on fc.flight_id = f.id
+    join flights f on fc.flight_id = f.id
     where fc.crew_member_id = new.crew_member_id and f.take_off_date = flight_date;
 
     If conflict_count > 0 then
@@ -56,7 +56,7 @@ begin
 end; //
 delimiter ;
 
-/*PROCEDURE*/
+/* STORED PROCEDURE */
 Delimiter //
 Create procedure PlaneUsageWhileReport()
 begin
@@ -84,5 +84,3 @@ begin
     close plane_cursor;
 end; //
 delimiter ;
-
- 

@@ -26,8 +26,7 @@ CREATE TABLE flights (
     id INT PRIMARY KEY AUTO_INCREMENT,
     take_off_date DATE NOT NULL,
     take_off_hour TIME NOT NULL,
-    duration_minutes INT NOT NULL, -- по-лесно за изчисления от текст
-    plane_id INT,
+    duration_minutes INT NOT NULL, -- Easier for calculations compared to string format
     departure_airport_id INT,
     arrival_airport_id INT,
     food_type VARCHAR(50),
